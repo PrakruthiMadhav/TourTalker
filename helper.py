@@ -12,15 +12,15 @@ from langchain.llms import GooglePalm
 api_key="AIzaSyAN8qDBM-rPoyB5exg83K62HH-d2iBi948"
 llm=GooglePalm(google_api_key=api_key,temperature=0.2)
 
-from langchain.embeddings import HuggingFaceInstructEmbeddings
-instructor_embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
-e = instructor_embeddings.embed_query("What is your refund policy?")
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
+instructor_embeddings = HuggingFaceEmbeddings()
 print("hi")
 vectordb_file_path = "faiss_index"
 
 def create_vector_db():
     # Load data from FAQ sheet
-    loader = CSVLoader(file_path='C:/Users/prakruthimadhav/Documents/travel chatbot/agra_travel_qa.csv', source_column="question")
+    loader = CSVLoader(file_path='C:/Users/prakruthimadhav/Documents/travel chatbot/combined_dataset_travel.csv', source_column="question")
     data = loader.load()
 
     # Create a FAISS instance for vector database from 'data'
@@ -38,7 +38,7 @@ def get_qa_chain():
     # Create a retriever for querying the vector database
     retriever = vectordb.as_retriever(score_threshold=0.7)
 
-    prompt_template = """Given the following context and a question, generate an answer based on this context only.
+    prompt_template = """Given the fol  lowing context and a question, generate an answer based on this context only.
     In the answer try to provide as much text as possible from "response" section in the source document context without making much changes.
     If the answer is not found in the context, kindly state "I don't know." Don't try to make up an answer.
 
